@@ -2,11 +2,12 @@
 .vagrant
 *.box
 
-# Incoreporate the .gitignore file from Web Starter Kit
+# Incorporate the .gitignore file from Web Starter Kit
 project/node_modules
 project/dist/
 project/.tmp
-project/app.yaml
+project/bower_components
+project/test/bower_components
 
 # Exclude Firebase related log files
 project/firebase-debug.log
