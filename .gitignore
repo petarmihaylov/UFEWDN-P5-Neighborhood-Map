@@ -1,0 +1,12 @@
+.idea
+.vagrant
+*.box
+
+# Incoreporate the .gitignore file from Web Starter Kit
+project/node_modules
+project/dist/
+project/.tmp
+project/app.yaml
+
+# Exclude Firebase related log files
+project/firebase-debug.log
