@@ -16,6 +16,7 @@
 
     <!-- build:css styles/main.css -->
     <link rel="stylesheet" href="styles/main.css">
+    <link rel="stylesheet" href="styles/drawer.css">
     <!-- endbuild -->
 
     <!-- build:js scripts/vendor/modernizr.js -->
@@ -27,9 +28,35 @@
       <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
     <![endif]-->
 
-    <div class="container-fluid">
-      <h1>Initial commit...</h1>
+    <!--  Drawer Navigation -->
+    <div class="menu">
+      <h3 id="title">Neighborhood Map</h3>
+      <div id="search">
+        <div class="input-group">
+          <input type="text" class="form-control" placeholder="Search for...">
+          <span class="input-group-btn">
+            <button class="btn btn-primary" type="button">
+              <span class="glyphicon glyphicon-filter" aria-hidden="true"></span>
+              Filter</button>
+          </span>
+        </div><!-- /input-group -->
+      </div>
+      <ul class="locations-list">
+        <li class="location"><a href="#">Test 1</a></li>
+        <li class="location"><a href="#">Test 2</a></li>
+        <li class="location"><a href="#">Test 3</a></li>
+        <li class="location"><a href="#">Test 4</a></li>
+        <li class="location"><a href="#">Test 5</a></li>
+      </ul>
     </div>
+
+    <input type="checkbox" id="menu-trigger" class="menu-trigger" aria-label="Left Align"/>
+    <label for="menu-trigger"><span class="glyphicon glyphicon-menu-hamburger" aria-hidden="true"></span></label>
+
+    <div class="site-wrap" id="map">
+        <!-- insert the rest of your page markup here -->
+    </div>
+
 
     <!-- Google Analytics: change UA-XXXXX-X to be your site's ID. -->
     <script>
@@ -64,8 +91,13 @@
     <script src="/bower_components/bootstrap-sass/assets/javascripts/bootstrap/tab.js"></script>
     <!-- endbuild -->
 
+    <!-- Load Google Maps Map -->
+    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBWxSmaTUsN1eEsNXbNHzLm9Q6VT4bmlII"
+    ></script>
+
     <!-- build:js scripts/main.js -->
     <script src="scripts/main.js"></script>
     <!-- endbuild -->
+
   </body>
 </html>
