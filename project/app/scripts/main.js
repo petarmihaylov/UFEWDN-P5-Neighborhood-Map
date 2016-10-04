@@ -1,6 +1,15 @@
-console.log('\'Allo \'Allo!');
-
 $(function(){
+  // Load Firebase
+  const config = {
+    apiKey: 'AIzaSyBWxSmaTUsN1eEsNXbNHzLm9Q6VT4bmlII',
+    authDomain: 'udacity-maps-project-144315.firebaseapp.com',
+    databaseURL: 'https://udacity-maps-project-144315.firebaseio.com',
+    storageBucket: 'udacity-maps-project-144315.appspot.com',
+    messagingSenderId: '94521799835'
+  };
+  // Initialize Firebase
+  firebase.initializeApp(config);
+
   // Load the map
   var map;
   function initMap() {
@@ -15,5 +24,11 @@ $(function(){
     });
   };
 
+  const dbRefObject = firebase.database().ref().child('locations');
+  // dbRefObject.on('value', snap => locObject.text(snap.val()));
+  dbRefObject.on('value', snap => console.log(snap.val()));
+
+  // Initialize the map
   initMap();
+
 });
