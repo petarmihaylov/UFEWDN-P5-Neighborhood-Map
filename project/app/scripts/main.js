@@ -1,5 +1,7 @@
 $(function(){
+  //
   // Load Firebase
+  //
   const config = {
     apiKey: 'AIzaSyBWxSmaTUsN1eEsNXbNHzLm9Q6VT4bmlII',
     authDomain: 'udacity-maps-project-144315.firebaseapp.com',
@@ -9,6 +11,21 @@ $(function(){
   };
   // Initialize Firebase
   firebase.initializeApp(config);
+
+  const dbRefObject = firebase.database().ref().child('locations');
+
+  // Get the data from Firebase
+  var data = [];
+  dbRefObject.on('child_added', snap => {
+    data.push(snap.val());
+    // $('.locations-list').append($('<li class="location">').append(
+    //   $('<a href="#">').text(snap.val().name)));
+  });
+
+  console.log(data);
+
+
+
 
   // Load the map
   var map;
@@ -23,10 +40,6 @@ $(function(){
     },
     });
   };
-
-  const dbRefObject = firebase.database().ref().child('locations');
-  // dbRefObject.on('value', snap => locObject.text(snap.val()));
-  dbRefObject.on('value', snap => console.log(snap.val()));
 
   // Initialize the map
   initMap();
