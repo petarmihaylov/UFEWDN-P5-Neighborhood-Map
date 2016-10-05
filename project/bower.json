@@ -4,7 +4,9 @@
   "dependencies": {
     "bootstrap-sass": "~3.3.5",
     "modernizr": "~2.8.1",
-    "knockout": "knockoutjs#^3.4.0"
+    "knockout": "knockoutjs#^3.4.0",
+    "requirejs": "^2.3.2",
+    "firebase": "^3.4.1"
   },
   "overrides": {
     "bootstrap-sass": {

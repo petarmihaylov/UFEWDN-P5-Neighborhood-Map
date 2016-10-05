@@ -33,6 +33,11 @@ gulp.task('scripts', () => {
     .pipe(reload({stream: true}));
 });
 
+gulp.task('lib-copy', () => {
+  return gulp.src('app/scripts/**/*.js')
+    .pipe(gulp.dest('dist/scripts'))
+});
+
 function lint(files, options) {
   return gulp.src(files)
     .pipe(reload({stream: true, once: true}))
@@ -57,6 +62,15 @@ gulp.task('lint:test', () => {
     .pipe(gulp.dest('test/spec/**/*.js'));
 });
 
+// gulp.task('html', ['styles', 'scripts'], () => {
+//   return gulp.src('app/*.html')
+//     .pipe($.useref({searchPath: ['.tmp', 'app', '.']}))
+//     .pipe($.if('*.js', $.uglify()))
+//     .pipe($.if('*.css', $.cssnano({safe: true, autoprefixer: false})))
+//     .pipe($.if('*.html', $.htmlmin({collapseWhitespace: true})))
+//     .pipe(gulp.dest('dist'));
+// });
+
 gulp.task('html', ['styles', 'scripts'], () => {
   return gulp.src('app/*.html')
     .pipe($.useref({searchPath: ['.tmp', 'app', '.']}))
@@ -65,6 +79,7 @@ gulp.task('html', ['styles', 'scripts'], () => {
     .pipe($.if('*.html', $.htmlmin({collapseWhitespace: true})))
     .pipe(gulp.dest('dist'));
 });
+
 
 gulp.task('images', () => {
   return gulp.src('app/images/**/*')
@@ -165,7 +180,7 @@ gulp.task('wiredep', () => {
     .pipe(gulp.dest('app'));
 });
 
-gulp.task('build', ['lint', 'html', 'images', 'fonts', 'extras'], () => {
+gulp.task('build', ['lint', 'lib-copy', 'html', 'images', 'fonts', 'extras'], () => {
   return gulp.src('dist/**/*').pipe($.size({title: 'build', gzip: true}));
 });
 
