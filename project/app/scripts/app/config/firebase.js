@@ -1,3 +1,7 @@
+/* Google Maps javaScript API Configuration */
+
+// Author: Petar Mihaylov petarmihaylov.me
+
 define({
   config: {
     apiKey: 'AIzaSyBWxSmaTUsN1eEsNXbNHzLm9Q6VT4bmlII',

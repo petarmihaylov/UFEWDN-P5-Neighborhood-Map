@@ -1,3 +1,7 @@
+/* Google Maps javaScript API Configuration */
+
+// Author: Petar Mihaylov petarmihaylov.me
+
 requirejs.config({
   'baseUrl': 'scripts',
   'paths': {

@@ -1,4 +1,6 @@
+/* Google Maps javaScript API Configuration */
 
+// Author: Petar Mihaylov petarmihaylov.me
 
 define(  ['config/firebase', 'config/googleMaps'],
 function  (firebaseConfig, googleMapsConfig) {
