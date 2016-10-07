@@ -23,6 +23,13 @@
     <script src="/bower_components/modernizr/modernizr.js"></script>
     <!-- endbuild -->
 
+    <!-- build:js scripts/vendor.js -->
+    <!-- bower:js -->
+    <script src="/bower_components/jquery/dist/jquery.js"></script>
+    <script src="/bower_components/knockout/dist/knockout.js"></script>
+    <!-- endbower -->
+    <!-- endbuild -->
+
     <!-- Load Firebase -->
     <script src="https://www.gstatic.com/firebasejs/3.4.1/firebase.js"></script>
 
@@ -68,13 +75,6 @@
 
     </script>
 
-    <!-- build:js scripts/vendor.js -->
-    <!-- bower:js -->
-    <script src="/bower_components/jquery/dist/jquery.js"></script>
-    <script src="/bower_components/knockout/dist/knockout.js"></script>
-    <!-- endbower -->
-    <!-- endbuild -->
-
     <!-- build:js scripts/plugins.js -->
     <script src="/bower_components/bootstrap-sass/assets/javascripts/bootstrap/affix.js"></script>
     <script src="/bower_components/bootstrap-sass/assets/javascripts/bootstrap/alert.js"></script>
@@ -95,8 +95,8 @@
     <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBWxSmaTUsN1eEsNXbNHzLm9Q6VT4bmlII"
     ></script>
 
-    <!-- build:js scripts/main.js -->
-    <script src="scripts/main.js"></script>
+    <!-- build:js scripts/app.js -->
+    <script data-main="scripts/app/main" src="/bower_components/requirejs/require.js"></script>
     <!-- endbuild -->
 
   </body>

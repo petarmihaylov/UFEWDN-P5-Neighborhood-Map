@@ -1,3 +1,10 @@
+
+
+define(["firebaseConfig"], function(fbConf) {
+  console.log('This is the main.js file and it is running!');
+});
+
+/*
 $(function(){
   //
   // Load Firebase
@@ -22,11 +29,6 @@ $(function(){
     //   $('<a href="#">').text(snap.val().name)));
   });
 
-  console.log(data);
-
-
-
-
   // Load the map
   var map;
   function initMap() {
@@ -45,3 +47,5 @@ $(function(){
   initMap();
 
 });
+
+*/
