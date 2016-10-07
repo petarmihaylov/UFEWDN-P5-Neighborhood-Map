@@ -19,6 +19,27 @@
     <link rel="stylesheet" href="styles/drawer.css">
     <!-- endbuild -->
 
+    <!-- build:js scripts/vendor/modernizr.js -->
+    <script src="/bower_components/modernizr/modernizr.js"></script>
+    <!-- endbuild -->
+
+    <!-- build:js scripts/jquery.js -->
+    <!-- bower:js -->
+    <script src="/bower_components/jquery/dist/jquery.js"></script>
+    <script src="/bower_components/knockout/dist/knockout.js"></script>
+    <!-- endbower -->
+    <!-- endbuild -->
+
+    <!-- build:js scripts/knockout.js -->
+    <!-- bower:js -->
+    <script src="/bower_components/jquery/dist/jquery.js"></script>
+    <script src="/bower_components/knockout/dist/knockout.js"></script>
+    <!-- endbower -->
+    <!-- endbuild -->
+
+    <!-- Load Firebase -->
+    <script src="https://www.gstatic.com/firebasejs/3.4.1/firebase.js"></script>
+
   </head>
   <body>
     <!--[if lt IE 10]>
@@ -61,43 +82,7 @@
 
     </script>
 
-    <!-- ************************** -->
-    <!-- BUILD ALL REQUIRED SCRIPTS -->
-    <!-- ************************** -->
-
-    <!-- All these will be loaded by reqire.js -->
-    <!-- They can all be together for readability -->
-    <!-- Gulp will build these and require.js will load the async -->
-
-    <!-- build:js scripts/lib/modernizr.js -->
-    <script src="/bower_components/modernizr/modernizr.js"></script>
-    <!-- endbuild -->
-
-    <!-- build:js scripts/lib/jquery.js -->
-    <!-- bower:js -->
-    <script src="/bower_components/jquery/dist/jquery.js"></script>
-    <!-- endbower -->
-    <!-- endbuild -->
-
-    <!-- build:js scripts/lib/knockout.js -->
-    <!-- bower:js -->
-    <script src="/bower_components/knockout/dist/knockout.js"></script>
-    <!-- endbower -->
-    <!-- endbuild -->
-
-    <!-- build:js scripts/lib/firebase.js -->
-    <!-- bower:js -->
-    <script src="/bower_components/firebase/firebase.js"></script>
-    <!-- endbower -->
-    <!-- endbuild -->
-
-    <!-- build:js scripts/app/config/firebase.js -->
-    <script src="scripts/app/config/firebase.js"></script>
-    <!-- endbuild -->
-
-    
-
-    <!-- build:js scripts/lib/plugins.js -->
+    <!-- build:js scripts/plugins.js -->
     <script src="/bower_components/bootstrap-sass/assets/javascripts/bootstrap/affix.js"></script>
     <script src="/bower_components/bootstrap-sass/assets/javascripts/bootstrap/alert.js"></script>
     <script src="/bower_components/bootstrap-sass/assets/javascripts/bootstrap/dropdown.js"></script>
@@ -113,27 +98,13 @@
     <script src="/bower_components/bootstrap-sass/assets/javascripts/bootstrap/tab.js"></script>
     <!-- endbuild -->
 
-    <!-- build:js scripts/app/main.js -->
-    <script src="scripts/app/main.js"></script>
-    <!-- endbuild -->
+    <!-- Load Google Maps Map -->
+    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBWxSmaTUsN1eEsNXbNHzLm9Q6VT4bmlII"
+    ></script>
 
     <!-- build:js scripts/app.js -->
-    <script src="scripts/app.js"></script>
+    <script data-main="scripts/app/main" src="/bower_components/requirejs/require.js"></script>
     <!-- endbuild -->
-
-    <!-- Load the main script for the application -->
-    <!-- data-main attribute tells require.js to load -->
-    <!-- scripts/app.js after require.js loads. -->
-
-    <!-- build:js scripts/lib/require.js -->
-    <!-- bower:js -->
-    <script data-main="scripts/app" src="/bower_components/requirejs/require.js"></script>
-    <!-- endbower -->
-    <!-- endbuild -->
-
-    <!-- ********************** -->
-    <!-- END OF SCRIPT BUILDING -->
-    <!-- ********************** -->
 
   </body>
 </html>
