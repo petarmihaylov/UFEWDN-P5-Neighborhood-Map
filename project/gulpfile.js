@@ -111,6 +111,8 @@ gulp.task('extras', () => {
 
 gulp.task('clean', del.bind(null, ['.tmp', 'dist']));
 
+gulp.task('delete requirejs_compile.html', ['html'], del.bind(null, ['dist/requirejs_compile.html']));
+
 gulp.task('serve', ['styles', 'scripts', 'fonts'], () => {
   browserSync({
     notify: false,
@@ -180,7 +182,7 @@ gulp.task('wiredep', () => {
     .pipe(gulp.dest('app'));
 });
 
-gulp.task('build', ['lint', 'lib-copy', 'html', 'images', 'fonts', 'extras'], () => {
+gulp.task('build', ['lint', 'lib-copy', 'html', 'images', 'fonts', 'extras', 'delete requirejs_compile.html'], () => {
   return gulp.src('dist/**/*').pipe($.size({title: 'build', gzip: true}));
 });
 

@@ -20,32 +20,16 @@
     <link rel="stylesheet" href="styles/loader.css">
     <!-- endbuild -->
 
-    <!-- build:js scripts/vendor/modernizr.js -->
-    <script src="/bower_components/modernizr/modernizr.js"></script>
-    <!-- endbuild -->
-
-    <!-- build:js scripts/jquery.js -->
-    <!-- bower:js -->
-    <script src="/bower_components/jquery/dist/jquery.js"></script>
-    <script src="/bower_components/knockout/dist/knockout.js"></script>
-    <!-- endbower -->
-    <!-- endbuild -->
-
-    <!-- build:js scripts/knockout.js -->
-    <!-- bower:js -->
-    <script src="/bower_components/jquery/dist/jquery.js"></script>
-    <script src="/bower_components/knockout/dist/knockout.js"></script>
-    <!-- endbower -->
-    <!-- endbuild -->
-
-    <!-- Load Firebase -->
-    <script src="https://www.gstatic.com/firebasejs/3.4.1/firebase.js"></script>
-    
   </head>
   <body>
     <!--[if lt IE 10]>
       <p class="browserupgrade">You are using an <strong>outdated</strong> browser. Please <a href="http://browsehappy.com/">upgrade your browser</a> to improve your experience.</p>
     <![endif]-->
+
+    <div class="loader">
+      <div class="loader__figure"></div>
+      <p class="loader__label">Loading...</p>
+    </div>
 
     <!--  Drawer Navigation -->
     <div class="menu">
@@ -66,27 +50,32 @@
     <input type="checkbox" id="menu-trigger" class="menu-trigger" aria-label="Left Align"/>
     <label id="menu-trigger-label" for="menu-trigger"><span class="glyphicon glyphicon-menu-hamburger" aria-hidden="true"></span></label>
 
+    <div class="overlay"></div>
+    
     <div class="site-wrap" id="map">
         <!-- insert the rest of your page markup here -->
     </div>
 
-    <div class="loader">
-      <div class="loader__figure"></div>
-      <p class="loader__label">Loading...</p>
-    </div>
 
 
-    <!-- Google Analytics: change UA-XXXXX-X to be your site's ID. -->
-    <script>
-      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
-      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
-      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
-      })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+    <!-- build:js scripts/vendor/modernizr.js -->
+    <script src="/bower_components/modernizr/modernizr.js"></script>
+    <!-- endbuild -->
 
-      ga('create', 'UA-41151500-4', 'auto');
-      ga('send', 'pageview');
+    <!-- build:js scripts/jquery.js -->
+    <!-- bower:js -->
+    <script src="/bower_components/jquery/dist/jquery.js"></script>
+    <!-- endbower -->
+    <!-- endbuild -->
 
-    </script>
+    <!-- build:js scripts/knockout.js -->
+    <!-- bower:js -->
+    <script src="/bower_components/knockout/dist/knockout.js"></script>
+    <!-- endbower -->
+    <!-- endbuild -->
+
+    <!-- Load Firebase -->
+    <script async src="https://www.gstatic.com/firebasejs/3.4.1/firebase.js"></script>
 
     <!-- build:js scripts/plugins.js -->
     <script src="/bower_components/bootstrap-sass/assets/javascripts/bootstrap/affix.js"></script>
@@ -105,12 +94,23 @@
     <!-- endbuild -->
 
     <!-- Load Google Maps Map -->
-    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBWxSmaTUsN1eEsNXbNHzLm9Q6VT4bmlII"
-    ></script>
+    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBWxSmaTUsN1eEsNXbNHzLm9Q6VT4bmlII"></script>
 
-    <!-- build:js scripts/app.js -->
-    <script data-main="scripts/app/main" src="/bower_components/requirejs/require.js"></script>
-    <!-- endbuild -->
+    <!-- The requi.js and app.js files are generated in requirejs_compile.html -->
+
+    <script data-main="scripts/app/main" src="scripts/require.js"></script>
+
+    <!-- Google Analytics: change UA-XXXXX-X to be your site's ID. -->
+    <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+      ga('create', 'UA-41151500-4', 'auto');
+      ga('send', 'pageview');
+
+    </script>
 
   </body>
 </html>
