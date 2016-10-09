@@ -18,11 +18,12 @@ function  (firebaseConfig,    googleMapsConfig,    Location) {
     // This runs async so I have to wait to make sure the data is there before
     // moving forward
     dbRefObjectLocations.on('child_added', snap => {
-      console.log(snap);
       self.locationList.push( new Location(snap.val()) );
     })
 
-    console.log(self.locationList());
+    // Load the Map
+    var map;
+    googleMapsConfig.initMap(map);
 
   };
 
