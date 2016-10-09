@@ -17,6 +17,7 @@
     <!-- build:css styles/main.css -->
     <link rel="stylesheet" href="styles/main.css">
     <link rel="stylesheet" href="styles/drawer.css">
+    <link rel="stylesheet" href="styles/loader.css">
     <!-- endbuild -->
 
     <!-- build:js scripts/vendor/modernizr.js -->
@@ -39,7 +40,7 @@
 
     <!-- Load Firebase -->
     <script src="https://www.gstatic.com/firebasejs/3.4.1/firebase.js"></script>
-
+    
   </head>
   <body>
     <!--[if lt IE 10]>
@@ -63,10 +64,15 @@
     </div>
 
     <input type="checkbox" id="menu-trigger" class="menu-trigger" aria-label="Left Align"/>
-    <label for="menu-trigger"><span class="glyphicon glyphicon-menu-hamburger" aria-hidden="true"></span></label>
+    <label id="menu-trigger-label" for="menu-trigger"><span class="glyphicon glyphicon-menu-hamburger" aria-hidden="true"></span></label>
 
     <div class="site-wrap" id="map">
         <!-- insert the rest of your page markup here -->
+    </div>
+
+    <div class="loader">
+      <div class="loader__figure"></div>
+      <p class="loader__label">Loading...</p>
     </div>
 
 
