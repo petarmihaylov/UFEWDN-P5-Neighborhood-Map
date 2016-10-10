@@ -1,5 +1,5 @@
-define(  ['config/firebase', 'config/googleMaps', 'models/location'],
-function  (firebaseConfig,    googleMapsConfig,    Location) {
+define(  ['config/firebase', 'models/location'],
+function  (firebaseConfig,    Location) {
   'use stricst';
 
   // the viewmodels
@@ -8,8 +8,8 @@ function  (firebaseConfig,    googleMapsConfig,    Location) {
 
     var map;
     var apisLoaded = 0
-    var firebaseDataLoaded = false;
-    var mapsLoaded = false;
+    var loadingFirabaseData = new $.Deferred();
+    var loadingMaps = new $.Deferred();
 
     // Initialize Firebase so we can get the data
     firebase.initializeApp(firebaseConfig.config);
@@ -23,29 +23,6 @@ function  (firebaseConfig,    googleMapsConfig,    Location) {
     // Set up the ko array so we can add the data
     self.locationList = ko.observableArray([]);
 
-
-    // Function to show the content once all data has been loaded
-    var showContent = function(firebaseDataLoadedState, mapsLoadedState) {
-      firebaseDataLoaded = firebaseDataLoadedState;
-      mapsLoaded = mapsLoadedState;
-      console.log(firebaseDataLoaded);
-      console.log(mapsLoaded);
-      if ( firebaseDataLoaded && mapsLoaded) {
-        $('.loader').fadeOut();
-        $('.menu').fadeIn();
-        $('#menu-trigger-label').fadeIn();
-        $('.overlay').fadeOut();
-        // $('.site-wrap').fadeIn();
-        // $('.site-wrap').animate('opacity', 1);
-      } else {
-        console.log('The check condition failed..');
-      }
-    }
-
-    var updateApiLoadedCount = function() {
-      apisLoaded++;
-    }
-
     dbRefObjectLocations.once('value', snap => {
       self.numLocations = snap.numChildren();
 
@@ -54,26 +31,39 @@ function  (firebaseConfig,    googleMapsConfig,    Location) {
       dbRefObjectLocations.on('child_added', snap => {
         self.locationList.push( new Location(snap.val()) );
         if (self.numLocations === self.locationList().length) {
-          // firebaseDataLoaded = true;
-          // showContent(firebaseDataLoaded, mapsLoaded);
-          updateApiLoadedCount;
+          // All locations are now loaded and the map can be initialized
+          initMap();
         }
       })
+    });
 
-    })
+    // Load the Map as a self-executing anonymous function
+    var initMap = function() {
+      'use strict';
+      map = new google.maps.Map(document.getElementById('map'), {
+        center: {lat: 26.100365, lng: -80.399775},
+        zoom: 13,
+        mapTypeControl: true,
+        mapTypeControlOptions: {
+          style: google.maps.MapTypeControlStyle.HORIZONTAL_BAR,
+          position: google.maps.ControlPosition.TOP_RIGHT
+      }
+      });
 
-    // Load the Map
-    googleMapsConfig.initMap(map, updateApiLoadedCount);
-    // googleMapsConfig.resize(map);
-
-    (function wait() {
-    if ( apisLoaded === 2 ) {
+      // This event is fired only once when the map loads
+      google.maps.event.addListenerOnce(map, 'tilesloaded', function() {
+        // Update mapsLoaded to indicate that Google Maps has been Initialized
         showContent();
-    } else {
-        console.log('Keep waiting...');
-        setTimeout( wait, 100 );
-    }
-})();
+      });
+    };
+
+    // Function to show the content once all data has been loaded
+    var showContent = function(firebaseDataLoadedState, mapsLoadedState) {
+      $('.loader').fadeOut();
+      $('.menu').fadeIn();
+      $('#menu-trigger-label').fadeIn();
+      $('.overlay').fadeOut();
+    };
 
   };
 
