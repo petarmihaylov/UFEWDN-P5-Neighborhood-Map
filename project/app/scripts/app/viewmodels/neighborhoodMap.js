@@ -21,6 +21,7 @@ function  (firebaseConfig,    Location) {
     self.numLocations = 0;
 
     // Set up the ko array so we can add the data
+    self.initialLocationList = []
     self.locationList = ko.observableArray([]);
 
     dbRefObjectLocations.once('value', snap => {
@@ -29,9 +30,14 @@ function  (firebaseConfig,    Location) {
       // This runs async so I have to wait to make sure the data is there before
       // moving forward
       dbRefObjectLocations.on('child_added', snap => {
-        self.locationList.push( new Location(snap.val()) );
+        self.locationList.push( snap.val() );
         if (self.numLocations === self.locationList().length) {
           // All locations are now loaded and the map can be initialized
+
+          self.initialLocationList.forEach(function(location) {
+            self.locationList.push( new Location(location) );
+          });
+
           initMap();
         }
       })

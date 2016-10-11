@@ -44,7 +44,9 @@
           </span>
         </div><!-- /input-group -->
       </div>
-      <ul class="locations-list"></ul>
+      <ul data-bind="foreach: locationList" class="locations-list">
+        <li class="location"> <a data-bind="text: name" href="#"></a></li>
+      </ul>
     </div>
 
     <input type="checkbox" id="menu-trigger" class="menu-trigger" aria-label="Left Align"/>
