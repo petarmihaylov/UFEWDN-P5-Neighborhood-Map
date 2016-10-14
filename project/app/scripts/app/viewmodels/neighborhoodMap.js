@@ -27,6 +27,7 @@ function  (firebaseConfig,    Location) {
     // Set up the ko array so we can add the data
     self.initialLocationList = []
     self.locationList = ko.observableArray([]);
+    self.filter = ko.observable();
 
     dbRefObjectLocations.once('value', snap => {
       self.numLocations = snap.numChildren();
@@ -147,6 +148,37 @@ function  (firebaseConfig,    Location) {
         }
       })
     };
+
+    // ko.utils.arrayFilter - filter the locations using the location Name
+    self.filteredItems = ko.computed(function() {
+      var filter = self.filter();
+      console.log('filter: ' + filter);
+
+      // Straigh from the knockoutjs.debug.js source code as this function
+      // is not included in the minified version
+      function stringStartsWith(string, startsWith) {
+          string = string || "";
+          if (startsWith.length > string.length)
+              return false;
+          return string.substring(0, startsWith.length) === startsWith;
+      };
+
+      if (!filter) {
+        // This runs only when the filter is undefined (aka: there is nothing entered in the 'Search for...' box)
+        return self.locationList();
+      } else {
+        var filtered = ko.utils.arrayFilter(self.locationList(), function(location) {
+          // Convert both the filter string and the name of the location to lowercase
+          // so that the search will only care about the order of the letters and not
+          // capitalization
+          return stringStartsWith(location.name.toLowerCase(), filter.toLowerCase());
+        });
+
+        console.log(filtered);
+        return filtered;
+      };
+
+    });
 
   };
 

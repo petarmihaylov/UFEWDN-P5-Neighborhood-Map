@@ -36,7 +36,7 @@
       <h3 id="title">Neighborhood Map</h3>
       <div id="search">
         <div class="input-group">
-          <input type="text" class="form-control" placeholder="Search for...">
+          <input data-bind="with: filteredItems, value: filter, valueUpdate: 'afterkeydown'" type="text" class="form-control" placeholder="Search for...">
           <span class="input-group-btn">
             <button class="btn btn-primary" type="button">
               <span class="glyphicon glyphicon-filter" aria-hidden="true"></span>
@@ -44,7 +44,9 @@
           </span>
         </div><!-- /input-group -->
       </div>
-      <ul data-bind="foreach: locationList" class="locations-list">
+
+      <!-- Show only the filtered items. Initially the filter is undefined and therefore every item appears -->
+      <ul data-bind="foreach: filteredItems" class="locations-list">
         <li class="location"> <a data-bind="text: name, click: $parent.changeLocation" href="#"></a></li>
       </ul>
     </div>
