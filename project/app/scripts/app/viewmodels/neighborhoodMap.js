@@ -140,12 +140,7 @@ function  (firebaseConfig,    Location) {
       $('.overlay').fadeOut();
     };
 
-    // Start with a default selection as the location
-    //self.currentLocation = ko.observable( self.locationList[0] );
-
     self.changeLocation = function(clickedLocation) {
-      //self.currentLocation(clickedLocation);
-      console.log(clickedLocation);
       markers.forEach(function(marker) {
         if (marker.title === clickedLocation.name) {
           populateInfoWindow(marker, largeInfowindow);
@@ -156,24 +151,5 @@ function  (firebaseConfig,    Location) {
   };
 
   return ViewModel;
-
-
-  // firebase.initializeApp(firebaseConfig.config);
-  //
-  // const dbRefObject = firebase.database().ref().child('locations');
-  //
-  // // Get the data from Firebase
-  // var data = [];
-  // dbRefObject.on('child_added', snap => {
-  //   data.push(snap.val());
-  //   // $('.locations-list').append($('<li class="location">').append(
-  //   //   $('<a href="#">').text(snap.val().name)));
-  // });
-  //
-  // console.log(data);
-  //
-  // // Load the Map
-  // var map;
-  // googleMapsConfig.initMap(map);
 
 });
