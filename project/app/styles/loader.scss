@@ -6,16 +6,6 @@ body {
   height: 100vh;
   -webkit-font-smoothing: antialiased;
 }
-body::before {
-  content: "";
-  position: absolute;
-  top: 0;
-  left: 0;
-  height: 100%;
-  width: 100%;
-  background-size: cover;
-  opacity: 0.25;
-}
 
 .loader,
 .loader__figure {

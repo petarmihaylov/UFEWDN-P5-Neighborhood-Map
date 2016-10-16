@@ -31,7 +31,9 @@ body {
   background: #111;
   background-size: contain;
 
-  #title {
+  .title {
+    display: block;
+    text-decoration: none;
     width: $menu-width;
     text-align: center;
     margin: 10px 0;
