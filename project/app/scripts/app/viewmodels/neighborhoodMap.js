@@ -78,10 +78,20 @@ function  (firebaseConfig,    Location) {
 
         var latlong = listArray[i].latlong;
         var name = listArray[i].name;
+        var address = listArray[i].address;
+        var whyLoveIt = listArray[i].whyLoveIt;
+
+        var contentString = '<div>' +
+        '<h3>' + name + '</h3>' +
+        '<p><strong>Address</strong><br />' + address +'</p>' +
+        '<p><strong>Why shoould you love it?</strong><br />' + whyLoveIt + '</p>' +
+        '<div>'
+
         // Create a marker per location, and put into markers array.
          var marker = new google.maps.Marker({
           position: latlong,
           title: name,
+          content: contentString,
           animation: google.maps.Animation.DROP,
           id: i
         });
@@ -102,17 +112,17 @@ function  (firebaseConfig,    Location) {
     function populateInfoWindow(marker, infowindow) {
       // Check to make sure the infowindow is not already opened on this marker.
       if (infowindow.marker != marker) {
-
-        // Turn off all aninations
-        markers.forEach( function(marker) {
-          marker.setAnimation(null);
-        });
+        // Turn off the amination for the curent infowindow marker
+        if (infowindow.marker != null) {
+          infowindow.marker.setAnimation(null);
+        }
 
         // Set the amination for the marker of the clicked location
         marker.setAnimation(google.maps.Animation.BOUNCE);
 
         infowindow.marker = marker;
-        infowindow.setContent('<div>' + marker.title + '</div>');
+        console.log(marker);
+        infowindow.setContent(marker.content);
         infowindow.open(map, marker);
 
         // Make sure the marker property is cleared if the infowindow is closed.
