@@ -11,7 +11,6 @@ function  (firebaseConfig,    Location) {
     // Create the infoWindow object
     var largeInfowindow = new google.maps.InfoWindow();
 
-    var apisLoaded = 0
     var loadingFirabaseData = new $.Deferred();
     var loadingMaps = new $.Deferred();
 
@@ -42,13 +41,11 @@ function  (firebaseConfig,    Location) {
           self.initialLocationList.forEach(function(location) {
             self.locationList.push( new Location(location) );
           });
-
           initMap();
         }
       })
     });
 
-    // Load the Map as a self-executing anonymous function
     function initMap() {
       'use strict';
       map = new google.maps.Map(document.getElementById('map'), {
@@ -61,13 +58,26 @@ function  (firebaseConfig,    Location) {
         }
       });
 
-      for (var i = 0; i < self.locationList().length; i++) {
-        // Get the position from the location array.
-        //console.log('name: ' + self.locationList()[i].name);
-        //console.log('latlong: ' + self.locationList()[i].latlong);
+      // Builds the markers list
+      buildMarkersList(self.filteredItems());
 
-        var latlong = self.locationList()[i].latlong;
-        var name = self.locationList()[i].name;
+      // This event is fired only once when the map loads
+      google.maps.event.addListenerOnce(map, 'tilesloaded', function() {
+        // Update mapsLoaded to indicate that Google Maps has been Initialized
+        showContent();
+        showLocations();
+      });
+    }; // END: initMap();
+
+    function buildMarkersList(listArray) {
+      markers = [];
+      for (var i = 0; i < listArray.length; i++) {
+        // Get the position from the location array.
+        // console.log('name: ' + self.locationList()[i].name);
+        // console.log('latlong: ' + self.locationList()[i].latlong);
+
+        var latlong = listArray[i].latlong;
+        var name = listArray[i].name;
         // Create a marker per location, and put into markers array.
          var marker = new google.maps.Marker({
           position: latlong,
@@ -84,14 +94,7 @@ function  (firebaseConfig,    Location) {
           populateInfoWindow(this, largeInfowindow);
         });
       }
-
-      // This event is fired only once when the map loads
-      google.maps.event.addListenerOnce(map, 'tilesloaded', function() {
-        // Update mapsLoaded to indicate that Google Maps has been Initialized
-        showContent();
-        showLocations();
-      });
-    };
+    }
 
     // This function populates the infowindow when the marker is clicked. We'll only allow
     // one infowindow which will open at the marker that is clicked, and populate based
@@ -119,22 +122,32 @@ function  (firebaseConfig,    Location) {
           // Stop the animation when the infowindow is closed
           marker.setAnimation(null);
         });
-      }
-    }
+      };
+    };
 
     // This function will loop through the markers array and display them all.
     function showLocations() {
-      var bounds = new google.maps.LatLngBounds();
-      // Extend the boundaries of the map for each marker and display the marker
       for (var i = 0; i < markers.length; i++) {
         markers[i].setMap(map);
-        bounds.extend(markers[i].position);
       }
-      map.fitBounds(bounds);
     };
 
+    // This function will loop through the listings and hide them all.
+    function hideLocations() {
+      for (var i = 0; i < markers.length; i++) {
+        markers[i].setMap(null);
+      }
+    };
+
+    // Updates the list of markers to be seen
+    function updateMarkersList(listArray) {
+      hideLocations();
+      buildMarkersList(listArray);
+      showLocations();
+    }
+
     // Function to show the content once all data has been loaded
-    function showContent(firebaseDataLoadedState, mapsLoadedState) {
+    function showContent() {
       $('.loader').fadeOut();
       $('.menu').fadeIn();
       $('#menu-trigger-label').fadeIn();
@@ -147,25 +160,35 @@ function  (firebaseConfig,    Location) {
           populateInfoWindow(marker, largeInfowindow);
         }
       })
-    };
+    }; // END: self.changeLocation
 
     // ko.utils.arrayFilter - filter the locations using the location Name
     self.filteredItems = ko.computed(function() {
       var filter = self.filter();
-      console.log('filter: ' + filter);
 
       // Straigh from the knockoutjs.debug.js source code as this function
       // is not included in the minified version
       function stringStartsWith(string, startsWith) {
-          string = string || "";
+          string = string || '';
           if (startsWith.length > string.length)
               return false;
           return string.substring(0, startsWith.length) === startsWith;
       };
 
       if (!filter) {
-        // This runs only when the filter is undefined (aka: there is nothing entered in the 'Search for...' box)
-        return self.locationList();
+        // Only return the array if it has been fully built with all location points
+        if (self.locationList().length === self.numLocations ) {
+          // This runs only when the filter is undefined (aka: there is nothing entered in the 'Search for...' box)
+          //updateMarkersList(self.locationList());
+          //return self.locationList();
+          var filtered = ko.utils.arrayFilter(self.locationList(), function(location) {
+            return location.name
+          });
+
+          updateMarkersList(filtered);
+
+          return filtered;
+        }
       } else {
         var filtered = ko.utils.arrayFilter(self.locationList(), function(location) {
           // Convert both the filter string and the name of the location to lowercase
@@ -174,11 +197,10 @@ function  (firebaseConfig,    Location) {
           return stringStartsWith(location.name.toLowerCase(), filter.toLowerCase());
         });
 
-        console.log(filtered);
+        updateMarkersList(filtered);
         return filtered;
       };
-
-    });
+    }); // END: self.filteredItems
 
   };
 
