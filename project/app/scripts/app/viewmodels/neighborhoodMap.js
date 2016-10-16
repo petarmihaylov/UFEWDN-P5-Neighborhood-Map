@@ -206,7 +206,13 @@ function  (firebaseConfig,    Location) {
         $('#menu-trigger').prop('checked', false);
       }
     }; // END: self.changeLocation
-  };
+
+    // Adds an event listener to clear the filter
+    self.clearFilter = function() {
+      $('.filter-text').val('');
+      self.filter('');
+    }
+  }; // END: ViewModel
 
   return ViewModel;
 
