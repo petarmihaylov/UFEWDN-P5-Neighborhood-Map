@@ -146,22 +146,6 @@ function  (firebaseConfig,    Location) {
       showLocations();
     }
 
-    // Function to show the content once all data has been loaded
-    function showContent() {
-      $('.loader').fadeOut();
-      $('.menu').fadeIn();
-      $('#menu-trigger-label').fadeIn();
-      $('.overlay').fadeOut();
-    };
-
-    self.changeLocation = function(clickedLocation) {
-      markers.forEach(function(marker) {
-        if (marker.title === clickedLocation.name) {
-          populateInfoWindow(marker, largeInfowindow);
-        }
-      })
-    }; // END: self.changeLocation
-
     // ko.utils.arrayFilter - filter the locations using the location Name
     self.filteredItems = ko.computed(function() {
       var filter = self.filter();
@@ -179,8 +163,6 @@ function  (firebaseConfig,    Location) {
         // Only return the array if it has been fully built with all location points
         if (self.locationList().length === self.numLocations ) {
           // This runs only when the filter is undefined (aka: there is nothing entered in the 'Search for...' box)
-          //updateMarkersList(self.locationList());
-          //return self.locationList();
           var filtered = ko.utils.arrayFilter(self.locationList(), function(location) {
             return location.name
           });
@@ -202,6 +184,28 @@ function  (firebaseConfig,    Location) {
       };
     }); // END: self.filteredItems
 
+    // Function to show the content once all data has been loaded
+    function showContent() {
+      $('.loader').fadeOut();
+      $('.menu').fadeIn();
+      $('#menu-trigger-label').fadeIn();
+      $('.overlay').fadeOut();
+    };
+
+    self.changeLocation = function(clickedLocation) {
+      // Sets changes which infoWindow is open.
+      markers.forEach(function(marker) {
+        if (marker.title === clickedLocation.name) {
+          populateInfoWindow(marker, largeInfowindow);
+        }
+      });
+
+      // When the visible map is smaller than 700px, this also closes the side menu when a selection is mapsLoaded
+      // console.log($('#map > div > div > div:nth-child(1) > div:nth-child(3)').width());
+      if ($('#map > div > div > div:nth-child(1) > div:nth-child(3)').width() < 700 ) {
+        $('#menu-trigger').prop('checked', false);
+      }
+    }; // END: self.changeLocation
   };
 
   return ViewModel;
