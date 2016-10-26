@@ -22,6 +22,7 @@ Vagrant is not needed in order to run this project as long all other requirement
 
 ## Run the Built Project Locally
 1. Clone the repository to your local drive.
+ 
  ```
     git clone https://github.com/petarmihaylov/UFEWDN-P5-Neighborhood-Map
  ```
@@ -34,7 +35,8 @@ Open [https://nm.studio350.com](https://nm.studio350.com)
 ## Run the Project in Vagrant (for development)
 
 1. Make sure Vagrant is installed.
-2. Clone the repository to your local drive
+2. Clone the repository to your local drive.
+
  ```
     git clone https://github.com/petarmihaylov/UFEWDN-P5-Neighborhood-Map
  ```
