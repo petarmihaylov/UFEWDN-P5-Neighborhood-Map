@@ -1,5 +1,5 @@
-define(  ['config/firebase', 'models/location'],
-function  (firebaseConfig,    Location) {
+define(  ['config/firebase', 'config/foursquare', 'models/location'],
+function  (firebaseConfig,    foursquareConfig,    Location) {
   'use stricst';
 
   // the viewmodels
@@ -13,6 +13,66 @@ function  (firebaseConfig,    Location) {
 
     var loadingFirabaseData = new $.Deferred();
     var loadingMaps = new $.Deferred();
+
+    // Fousquare API
+    var fsBaseUrl = 'https://api.foursquare.com/v2/'
+    var fsId = foursquareConfig.config.id;
+    var fsSecret = foursquareConfig.config.secret;
+
+    // Get Foursquare content
+    function getFoursquareVenuePhotos(fsVenueId, marker) {
+      var fsService = 'venues/';
+      var fsUrl = fsBaseUrl + fsService + fsVenueId + '/photos/?' + $.param({
+        'client_id': fsId,
+        'client_secret': fsSecret,
+        'v': 20161001,
+        'limit': 5
+      });
+
+      $.getJSON(fsUrl, function(data) {
+      }).done(function(data){
+        var photoUrls = [];
+
+        $.each( data.response.photos.items, function( key, photo ) {
+          photoUrls.push(
+            // photo.prefix + photo.width + 'x' + photo.height + photo.suffix); // Original photo size
+            // photo.prefix + 'width100' + photo.suffix); // Proportionately saled based on width
+            '<a href="' + photo.prefix + 'original' + photo.suffix + '">' +
+            '<img src="' + photo.prefix + 'height100' + photo.suffix+ '"></a>'); // Proportionately saled based on height
+        });
+
+        populateInfoWindow(marker, largeInfowindow, photoUrls);
+
+      }).fail(function(){
+        // If the search fails, display an alert
+        alert('Unable to pull images from Foursquare');
+      });;
+    };
+
+    function getFoursquareData(latlong, name, marker) {
+      var fsVenueId;
+      var fsService = 'venues/search/?'
+      var fsUrl = fsBaseUrl + fsService + $.param({
+        'client_id': fsId,
+        'client_secret': fsSecret,
+        'v': 20161001,
+        'll': latlong,
+        'intent': 'match',
+        'query': name
+      });
+
+      $.getJSON(fsUrl, function (data) {
+      }).done(function(data){
+        fsVenueId = data.response.venues[0].id;
+        // Once I have the ID i should call the other function to get the photos
+        getFoursquareVenuePhotos(fsVenueId, marker)
+      }).fail(function(){
+        // If the search fails, display an alert
+        alert('Unable to pull images from Foursquare');
+      });
+    }
+
+    //getFoursquareData('26.097036,-80.384446', 'ultimate software');
 
     // Initialize Firebase so we can get the data
     firebase.initializeApp(firebaseConfig.config);
@@ -88,12 +148,13 @@ function  (firebaseConfig,    Location) {
         '<div>'
 
         // Create a marker per location, and put into markers array.
-         var marker = new google.maps.Marker({
+        var marker = new google.maps.Marker({
           position: latlong,
           title: name,
           content: contentString,
           animation: google.maps.Animation.DROP,
-          id: i
+          id: i,
+          numImages: 0
         });
         // Push the marker to our array of markers.
         markers.push(marker);
@@ -101,7 +162,10 @@ function  (firebaseConfig,    Location) {
         // Create an onclick event to open an infowindow at each marker.
         // console.log(marker);
         marker.addListener('click', function() {
-          populateInfoWindow(this, largeInfowindow);
+          // populateInfoWindow(this, largeInfowindow);
+          // Note: In this context this = 'clicked marker'
+          getFoursquareData(this.position.lat() + ',' + this.position.lng(),this.title, this);
+
         });
       }
     }
@@ -109,7 +173,7 @@ function  (firebaseConfig,    Location) {
     // This function populates the infowindow when the marker is clicked. We'll only allow
     // one infowindow which will open at the marker that is clicked, and populate based
     // on that markers position.
-    function populateInfoWindow(marker, infowindow) {
+    function populateInfoWindow(marker, infowindow, photoUrls) {
       // Check to make sure the infowindow is not already opened on this marker.
       if (infowindow.marker != marker) {
         // Turn off the amination for the curent infowindow marker
@@ -117,11 +181,20 @@ function  (firebaseConfig,    Location) {
           infowindow.marker.setAnimation(null);
         }
 
+        // Only allows for 5 images to be pulled
+        if ( marker.numImages  == 0 ) {
+          photoUrls.forEach(function(photo) {
+            marker.content += photo;
+            marker.numImages++;
+          });
+        } else {
+          console.log('Images already pulled. Skipping...');
+        }
+
         // Set the amination for the marker of the clicked location
         marker.setAnimation(google.maps.Animation.BOUNCE);
 
         infowindow.marker = marker;
-        console.log(marker);
         infowindow.setContent(marker.content);
         infowindow.open(map, marker);
 
@@ -202,11 +275,13 @@ function  (firebaseConfig,    Location) {
       $('.overlay').fadeOut();
     };
 
+    // This runs when a new location is selected from the menu
     self.changeLocation = function(clickedLocation) {
       // Sets changes which infoWindow is open.
       markers.forEach(function(marker) {
         if (marker.title === clickedLocation.name) {
-          populateInfoWindow(marker, largeInfowindow);
+          // populateInfoWindow(marker, largeInfowindow);
+          getFoursquareData(marker.position.lat() + ',' + marker.position.lng(),marker.title, marker);
         }
       });
 
@@ -222,6 +297,9 @@ function  (firebaseConfig,    Location) {
       $('.filter-text').val('');
       self.filter('');
     }
+
+
+
   }; // END: ViewModel
 
   return ViewModel;
