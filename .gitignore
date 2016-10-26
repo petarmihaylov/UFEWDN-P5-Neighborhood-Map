@@ -2,9 +2,17 @@
 .vagrant
 *.box
 
+# Exclude vagrant related provisioning logs
+provision-stderr.log
+provision-stdout.log
+
 # Incorporate the .gitignore file from Web Starter Kit
 project/node_modules
-project/dist/
+
+# The dist folder needs to be included
+#project/dist/
+
+
 project/.tmp
 project/bower_components
 project/test/bower_components
