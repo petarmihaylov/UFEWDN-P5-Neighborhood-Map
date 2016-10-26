@@ -22,7 +22,7 @@ Vagrant is not needed in order to run this project as long all other requirement
 
 ## Run the Built Project Locally
 1. Clone the repository to your local drive.
- 
+
  ```
     git clone https://github.com/petarmihaylov/UFEWDN-P5-Neighborhood-Map
  ```
@@ -45,5 +45,5 @@ Open [https://nm.studio350.com](https://nm.studio350.com)
 5. ```./bootstrap```
 6. ```./update-toolset``` - This will move the npm root to the vagrant user's home directory and update Yeoman, Bower, and Grunt.
 7. ```cd project```
-8. ```grunt serve```
+8. ```gulp serve```
 9. Navigate to ```localhost:9000``` from your local (vagrant host) machine.
