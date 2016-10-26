@@ -44,3 +44,16 @@ $icon-font-path: '../fonts/';
     margin-bottom: 0;
   }
 }
+
+.foursquare-images {
+  padding-top: 10px;
+}
+
+.foursquare-images a {
+  padding-right: 5px;
+
+  img {
+    border-radius: 5px;
+    box-shadow: 1px 1px 5px #888888;
+  }
+}

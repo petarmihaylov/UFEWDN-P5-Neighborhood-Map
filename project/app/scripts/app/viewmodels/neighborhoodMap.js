@@ -181,15 +181,25 @@ function  (firebaseConfig,    foursquareConfig,    Location) {
           infowindow.marker.setAnimation(null);
         }
 
-        // Only allows for 5 images to be pulled
-        if ( marker.numImages  == 0 ) {
-          photoUrls.forEach(function(photo) {
-            marker.content += photo;
-            marker.numImages++;
-          });
+        // Only do this if the photoUrls array is not empty
+        if (photoUrls.length != 0) {
+          marker.content += '<div class="foursquare-images">';
+          marker.content += '<p><strong>Location Photos</strong><br />'
+          // Only fo this if no images have been added to this marker yet
+          if ( marker.numImages  == 0 ) {
+            photoUrls.forEach(function(photo) {
+              marker.content += photo;
+              marker.numImages++;
+            });
+            marker.content += '<br /><h7>Images provided by Foursquare.</h7>'
+          } else {
+            console.log('Images already pulled. Skipping...');
+          }
         } else {
-          console.log('Images already pulled. Skipping...');
+          console.log('No images were returned for this location');
         }
+        marker.content += '</p>'
+        marker.content += '</div>';
 
         // Set the amination for the marker of the clicked location
         marker.setAnimation(google.maps.Animation.BOUNCE);
