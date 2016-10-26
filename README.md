@@ -1,4 +1,5 @@
 # UFEWDN-P5-Neighborhood-Map
+<<<<<<< HEAD
 Udacity's Front-End Web Development Nanodegree Project.
 
 This is the 5th of six projects of this nonedegree.
@@ -45,3 +46,6 @@ Open [https://nm.studio350.com](https://nm.studio350.com)
 7. ```cd project```
 8. ```grunt serve```
 9. Navigate to ```localhost:9000``` from your local (vagrant host) machine.
+=======
+Udacity's Front-End Web Development Nanodegree Project
+>>>>>>> 7c312f11a385d02ef368d187e6d9ad8eda467ad0
