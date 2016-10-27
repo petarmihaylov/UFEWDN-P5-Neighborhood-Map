@@ -39,7 +39,7 @@
       <a class="title" href="/privacy">Privacy Policy</a>
       <div id="search">
         <div class="input-group">
-          <input data-bind="with: filteredItems, value: filter, valueUpdate: 'afterkeydown'" type="text" class="form-control filter-text" placeholder="Search for...">
+          <input data-bind="with: filteredItems, textInput: filter" type="text" class="form-control filter-text" placeholder="Search for...">
           <span class="input-group-btn">
             <button  data-bind="click: clearFilter" class="btn btn-primary" type="button">
               Clear <span class="glyphicon glyphicon-filter" aria-hidden="true"></span></button>
@@ -52,7 +52,7 @@
         <li class="location"> <a data-bind="text: name, click: $parent.changeLocation" href="#"></a></li>
       </ul>
     </aside>
-    
+
     <input type="checkbox" id="menu-trigger" class="menu-trigger" aria-label="Left Align"/>
     <label id="menu-trigger-label" for="menu-trigger"><span class="glyphicon glyphicon-menu-hamburger" aria-hidden="true"></span></label>
 
