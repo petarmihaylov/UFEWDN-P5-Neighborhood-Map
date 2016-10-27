@@ -4,10 +4,12 @@
     <meta charset="utf-8">
     <meta name="description" content="Neighborhood Map - Udacity Front-End Webb Development Project 5">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="theme-color" content="#c0392b">
     <title>P5 - Neighborhood Map</title>
 
     <link rel="apple-touch-icon" href="apple-touch-icon.png">
     <!-- Place favicon.ico in the root directory -->
+    <link rel="shortcut icon" type="image/png" href="favicon.ico">
 
     <!-- build:css styles/vendor.css -->
     <!-- bower:css -->
@@ -16,7 +18,7 @@
 
     <!-- build:css styles/main.css -->
     <link rel="stylesheet" href="styles/main.css">
-    <link rel="stylesheet" href="styles/drawer.css">
+    <link rel="stylesheet" href="styles/aside.css">
     <link rel="stylesheet" href="styles/loader.css">
     <!-- endbuild -->
 
@@ -32,7 +34,7 @@
     </div>
 
     <!--  Drawer Navigation -->
-    <div class="menu">
+    <aside class="menu">
       <h3 class="title">Neighborhood Map</h3>
       <a class="title" href="/privacy">Privacy Policy</a>
       <div id="search">
@@ -49,16 +51,16 @@
       <ul data-bind="foreach: filteredItems" class="locations-list">
         <li class="location"> <a data-bind="text: name, click: $parent.changeLocation" href="#"></a></li>
       </ul>
-    </div>
-
+    </aside>
+    
     <input type="checkbox" id="menu-trigger" class="menu-trigger" aria-label="Left Align"/>
     <label id="menu-trigger-label" for="menu-trigger"><span class="glyphicon glyphicon-menu-hamburger" aria-hidden="true"></span></label>
 
     <div class="overlay"></div>
 
-    <div class="site-wrap" id="map">
+    <section class="site-wrap" id="map">
         <!-- insert the rest of your page markup here -->
-    </div>
+    </section>
 
 
 
