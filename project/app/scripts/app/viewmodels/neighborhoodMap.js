@@ -1,4 +1,6 @@
-define(  ['config/firebase', 'config/foursquare', 'models/location'],
+define(  ['config/firebase', 'config/foursquare', 'models/location',
+          'https://maps.googleapis.com/maps/api/js?key=AIzaSyBWxSmaTUsN1eEsNXbNHzLm9Q6VT4bmlII',
+          'https://www.gstatic.com/firebasejs/3.4.1/firebase.js'],
 function  (firebaseConfig,    foursquareConfig,    Location) {
   'use stricst';
 
@@ -8,11 +10,9 @@ function  (firebaseConfig,    foursquareConfig,    Location) {
 
     var map;
     var markers = [];
-    // Create the infoWindow object
-    var largeInfowindow = new google.maps.InfoWindow();
 
-    var loadingFirabaseData = new $.Deferred();
-    var loadingMaps = new $.Deferred();
+    // Create a infoWindow object
+    var largeInfowindow = new google.maps.InfoWindow();
 
     // Fousquare API
     var fsBaseUrl = 'https://api.foursquare.com/v2/'

@@ -59,7 +59,7 @@
     <div class="overlay"></div>
 
     <section class="site-wrap" id="map">
-        <!-- insert the rest of your page markup here -->
+        <!-- Everything else will be loaded here -->
     </section>
 
 
@@ -80,8 +80,7 @@
     <!-- endbower -->
     <!-- endbuild -->
 
-    <!-- Load Firebase -->
-    <script async src="https://www.gstatic.com/firebasejs/3.4.1/firebase.js"></script>
+    <script data-main="scripts/app/main" src="scripts/require.js"></script>
 
     <!-- build:js scripts/plugins.js -->
     <script src="/bower_components/bootstrap-sass/assets/javascripts/bootstrap/affix.js"></script>
@@ -99,12 +98,7 @@
     <script src="/bower_components/bootstrap-sass/assets/javascripts/bootstrap/tab.js"></script>
     <!-- endbuild -->
 
-    <!-- Load Google Maps Map -->
-    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBWxSmaTUsN1eEsNXbNHzLm9Q6VT4bmlII"></script>
-
-    <!-- The requi.js and app.js files are generated in requirejs_compile.html -->
-
-    <script data-main="scripts/app/main" src="scripts/require.js"></script>
+    <!-- The require.js and app.js files are generated in requirejs_compile.html -->
 
     <!-- Google Analytics: change UA-XXXXX-X to be your site's ID. -->
     <script>
