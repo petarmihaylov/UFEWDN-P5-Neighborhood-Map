@@ -1,4 +1,6 @@
-define(  ['config/firebase', 'config/foursquare', 'models/location'],
+define(  ['config/firebase', 'config/foursquare', 'models/location',
+          'https://maps.googleapis.com/maps/api/js?key=AIzaSyBWxSmaTUsN1eEsNXbNHzLm9Q6VT4bmlII',
+          'https://www.gstatic.com/firebasejs/3.4.1/firebase.js'],
 function  (firebaseConfig,    foursquareConfig,    Location) {
   'use stricst';
 
@@ -7,12 +9,10 @@ function  (firebaseConfig,    foursquareConfig,    Location) {
     var self = this;
 
     var map;
-    var markers = [];
-    // Create the infoWindow object
-    var largeInfowindow = new google.maps.InfoWindow();
+    self.markers = ko.observableArray([]);
 
-    var loadingFirabaseData = new $.Deferred();
-    var loadingMaps = new $.Deferred();
+    // Create a infoWindow object
+    var largeInfowindow = new google.maps.InfoWindow();
 
     // Fousquare API
     var fsBaseUrl = 'https://api.foursquare.com/v2/'
@@ -45,7 +45,7 @@ function  (firebaseConfig,    foursquareConfig,    Location) {
 
       }).fail(function(){
         // If the search fails, display an alert
-        alert('Unable to pull images from Foursquare');
+        alert('Unable to pull images from Foursquare.');
       });;
     };
 
@@ -68,7 +68,7 @@ function  (firebaseConfig,    foursquareConfig,    Location) {
         getFoursquareVenuePhotos(fsVenueId, marker)
       }).fail(function(){
         // If the search fails, display an alert
-        alert('Unable to pull images from Foursquare');
+        alert('Unable to pull images from Foursquare.');
       });
     }
 
@@ -103,6 +103,8 @@ function  (firebaseConfig,    foursquareConfig,    Location) {
           });
           initMap();
         }
+      }, error => {
+        alert('Failed to load the locations from the database.');
       })
     });
 
@@ -125,12 +127,12 @@ function  (firebaseConfig,    foursquareConfig,    Location) {
       google.maps.event.addListenerOnce(map, 'tilesloaded', function() {
         // Update mapsLoaded to indicate that Google Maps has been Initialized
         showContent();
-        showLocations();
+        drawMarkers();
       });
     }; // END: initMap();
 
     function buildMarkersList(listArray) {
-      markers = [];
+      //markers = ko.observableArray([]);
       for (var i = 0; i < listArray.length; i++) {
         // Get the position from the location array.
         // console.log('name: ' + self.locationList()[i].name);
@@ -157,7 +159,7 @@ function  (firebaseConfig,    foursquareConfig,    Location) {
           numImages: 0
         });
         // Push the marker to our array of markers.
-        markers.push(marker);
+        self.markers().push(marker);
 
         // Create an onclick event to open an infowindow at each marker.
         // console.log(marker);
@@ -219,25 +221,36 @@ function  (firebaseConfig,    foursquareConfig,    Location) {
     };
 
     // This function will loop through the markers array and display them all.
-    function showLocations() {
-      for (var i = 0; i < markers.length; i++) {
-        markers[i].setMap(map);
+    function drawMarkers() {
+      for (var i = 0; i < self.markers().length; i++) {
+        // console.log(markers()[i]);
+        self.markers()[i].setMap(map);
       }
     };
 
-    // This function will loop through the listings and hide them all.
-    function hideLocations() {
-      for (var i = 0; i < markers.length; i++) {
-        markers[i].setMap(null);
+    // This function will loop through the listings and hide/show the applicable markers
+    function toggleMarkers(listArray) {
+
+      // Hide all the markers
+      for (var i = 0; i < self.markers().length; i++) {
+        self.markers()[i].setVisible(false);
+      }
+
+      // Go through the list of filtered results and flip the visible flag to
+      // all markers that appear in the filtered list
+      for (var i = 0; i < self.markers().length; i++) {
+        for (var m = 0; m < listArray.length; m++) {
+          if ( listArray[m].name === self.markers()[i].title ) {
+            self.markers()[i].setVisible(true);
+          }
+        }
       }
     };
 
     // Updates the list of markers to be seen
     function updateMarkersList(listArray) {
-      hideLocations();
-      buildMarkersList(listArray);
-      showLocations();
-    }
+      toggleMarkers(listArray);
+    };
 
     // ko.utils.arrayFilter - filter the locations using the location Name
     self.filteredItems = ko.computed(function() {
@@ -288,10 +301,10 @@ function  (firebaseConfig,    foursquareConfig,    Location) {
     // This runs when a new location is selected from the menu
     self.changeLocation = function(clickedLocation) {
       // Sets changes which infoWindow is open.
-      markers.forEach(function(marker) {
+      self.markers().forEach(function(marker) {
         if (marker.title === clickedLocation.name) {
           // populateInfoWindow(marker, largeInfowindow);
-          getFoursquareData(marker.position.lat() + ',' + marker.position.lng(),marker.title, marker);
+          getFoursquareData(marker.position.lat() + ',' + marker.position.lng(), marker.title, marker);
         }
       });
 
