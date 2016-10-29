@@ -317,7 +317,6 @@ function  (firebaseConfig,    foursquareConfig,    Location) {
 
     // Adds an event listener to clear the filter
     self.clearFilter = function() {
-      $('.filter-text').val('');
       self.filter('');
     }
 
