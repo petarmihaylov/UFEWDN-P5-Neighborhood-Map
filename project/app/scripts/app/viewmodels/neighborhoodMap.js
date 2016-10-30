@@ -20,7 +20,7 @@ function  (firebaseConfig,    foursquareConfig,    Location) {
     var fsSecret = foursquareConfig.config.secret;
 
     // Get Foursquare content
-    function getFoursquareVenuePhotos(fsVenueId, marker) {
+    function getFoursquareVenuePhotos(fsVenueId, marker, infowindow) {
       var fsService = 'venues/';
       var fsUrl = fsBaseUrl + fsService + fsVenueId + '/photos/?' + $.param({
         'client_id': fsId,
@@ -31,17 +31,41 @@ function  (firebaseConfig,    foursquareConfig,    Location) {
 
       $.getJSON(fsUrl, function(data) {
       }).done(function(data){
+
         var photoUrls = [];
 
         $.each( data.response.photos.items, function( key, photo ) {
           photoUrls.push(
-            // photo.prefix + photo.width + 'x' + photo.height + photo.suffix); // Original photo size
-            // photo.prefix + 'width100' + photo.suffix); // Proportionately saled based on width
             '<a href="' + photo.prefix + 'original' + photo.suffix + '">' +
             '<img src="' + photo.prefix + 'height100' + photo.suffix+ '"></a>'); // Proportionately saled based on height
         });
 
-        populateInfoWindow(marker, largeInfowindow, photoUrls);
+        // Creat the Foursquare div
+        marker.content += '<div class="foursquare-images">';
+
+        // Only do this if the photoUrls array is not empty
+        if (photoUrls.length != 0) {
+          marker.content += '<p><strong>Location Photos</strong><br />'
+          // Only fo this if no images have been added to this marker yet
+          if ( marker.numImages  == 0 ) {
+            photoUrls.forEach(function(photo) {
+              marker.content += photo;
+              marker.numImages++;
+            });
+            marker.content += '<br /><h7>Images provided by Foursquare.</h7>';
+            marker.content += '</p>';
+          } else {
+            console.log('Images already pulled. Skipping...');
+          }
+        } else {
+          marker.content += '<div><p>There are no Foursquare images for this location.</p></div>'
+        }
+
+        // Close the Foursquare div
+        marker.content += '</div>';
+
+        infowindow.setContent(marker.content);
+        $('.foursquare-images-loader').remove();
 
       }).fail(function(){
         // If the search fails, display an alert
@@ -49,7 +73,7 @@ function  (firebaseConfig,    foursquareConfig,    Location) {
       });;
     };
 
-    function getFoursquareData(latlong, name, marker) {
+    function getFoursquareData(latlong, name, marker, infowindow) {
       var fsVenueId;
       var fsService = 'venues/search/?'
       var fsUrl = fsBaseUrl + fsService + $.param({
@@ -65,7 +89,7 @@ function  (firebaseConfig,    foursquareConfig,    Location) {
       }).done(function(data){
         fsVenueId = data.response.venues[0].id;
         // Once I have the ID i should call the other function to get the photos
-        getFoursquareVenuePhotos(fsVenueId, marker)
+        getFoursquareVenuePhotos(fsVenueId, marker, infowindow)
       }).fail(function(){
         // If the search fails, display an alert
         alert('Unable to pull images from Foursquare.');
@@ -134,9 +158,6 @@ function  (firebaseConfig,    foursquareConfig,    Location) {
     function buildMarkersList(listArray) {
       //markers = ko.observableArray([]);
       for (var i = 0; i < listArray.length; i++) {
-        // Get the position from the location array.
-        // console.log('name: ' + self.locationList()[i].name);
-        // console.log('latlong: ' + self.locationList()[i].latlong);
 
         var latlong = listArray[i].latlong;
         var name = listArray[i].name;
@@ -164,10 +185,8 @@ function  (firebaseConfig,    foursquareConfig,    Location) {
         // Create an onclick event to open an infowindow at each marker.
         // console.log(marker);
         marker.addListener('click', function() {
-          // populateInfoWindow(this, largeInfowindow);
+          populateInfoWindow(this, largeInfowindow);
           // Note: In this context this = 'clicked marker'
-          getFoursquareData(this.position.lat() + ',' + this.position.lng(),this.title, this);
-
         });
       }
     }
@@ -175,7 +194,7 @@ function  (firebaseConfig,    foursquareConfig,    Location) {
     // This function populates the infowindow when the marker is clicked. We'll only allow
     // one infowindow which will open at the marker that is clicked, and populate based
     // on that markers position.
-    function populateInfoWindow(marker, infowindow, photoUrls) {
+    function populateInfoWindow(marker, infowindow) {
       // Check to make sure the infowindow is not already opened on this marker.
       if (infowindow.marker != marker) {
         // Turn off the amination for the curent infowindow marker
@@ -183,32 +202,24 @@ function  (firebaseConfig,    foursquareConfig,    Location) {
           infowindow.marker.setAnimation(null);
         }
 
-        // Only do this if the photoUrls array is not empty
-        if (photoUrls.length != 0) {
-          marker.content += '<div class="foursquare-images">';
-          marker.content += '<p><strong>Location Photos</strong><br />'
-          // Only fo this if no images have been added to this marker yet
-          if ( marker.numImages  == 0 ) {
-            photoUrls.forEach(function(photo) {
-              marker.content += photo;
-              marker.numImages++;
-            });
-            marker.content += '<br /><h7>Images provided by Foursquare.</h7>'
-          } else {
-            console.log('Images already pulled. Skipping...');
-          }
-        } else {
-          console.log('No images were returned for this location');
-        }
-        marker.content += '</p>'
-        marker.content += '</div>';
-
         // Set the amination for the marker of the clicked location
         marker.setAnimation(google.maps.Animation.BOUNCE);
 
+        // Open the Marker window and start the loading spinner
         infowindow.marker = marker;
+
+        marker.content += '<div class="foursquare-images-loader">';
+        marker.content += '  <i class="fa fa-refresh fa-spin fa-lg fa-fw"></i>';
+        marker.content += '  <span class="sr-only">Loading...</span>';
+        marker.content += '</div>';
+
+
         infowindow.setContent(marker.content);
         infowindow.open(map, marker);
+
+        // Start the request to get the image data
+        getFoursquareData(marker.position.lat() + ',' + marker.position.lng(), marker.title, marker, infowindow);
+
 
         // Make sure the marker property is cleared if the infowindow is closed.
         infowindow.addListener('closeclick', function() {
@@ -303,8 +314,7 @@ function  (firebaseConfig,    foursquareConfig,    Location) {
       // Sets changes which infoWindow is open.
       self.markers().forEach(function(marker) {
         if (marker.title === clickedLocation.name) {
-          // populateInfoWindow(marker, largeInfowindow);
-          getFoursquareData(marker.position.lat() + ',' + marker.position.lng(), marker.title, marker);
+          populateInfoWindow(marker, largeInfowindow);
         }
       });
 
