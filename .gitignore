@@ -8,6 +8,7 @@ provision-stdout.log
 
 # Incorporate the .gitignore file from Web Starter Kit
 project/node_modules
+project/npm-debug.log
 
 # The dist folder needs to be included
 #project/dist/
