@@ -295,7 +295,10 @@ function  (firebaseConfig,    foursquareConfig,    Location) {
           // Convert both the filter string and the name of the location to lowercase
           // so that the search will only care about the order of the letters and not
           // capitalization
-          return stringStartsWith(location.name.toLowerCase(), filter.toLowerCase());
+
+          if ( location.name.toLowerCase().indexOf(filter.toLowerCase()) !== -1 ) {
+            return true;
+          }
         });
 
         updateMarkersList(filtered);
