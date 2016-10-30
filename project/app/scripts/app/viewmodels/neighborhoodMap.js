@@ -1,3 +1,4 @@
+/*jshint esversion: 6 */
 define(  ['config/firebase', 'config/foursquare', 'models/location',
           'https://maps.googleapis.com/maps/api/js?key=AIzaSyBWxSmaTUsN1eEsNXbNHzLm9Q6VT4bmlII',
           'https://www.gstatic.com/firebasejs/3.4.1/firebase.js'],
@@ -15,7 +16,7 @@ function  (firebaseConfig,    foursquareConfig,    Location) {
     var largeInfowindow = new google.maps.InfoWindow();
 
     // Fousquare API
-    var fsBaseUrl = 'https://api.foursquare.com/v2/'
+    var fsBaseUrl = 'https://api.foursquare.com/v2/';
     var fsId = foursquareConfig.config.id;
     var fsSecret = foursquareConfig.config.secret;
 
@@ -44,10 +45,10 @@ function  (firebaseConfig,    foursquareConfig,    Location) {
         marker.content += '<div class="foursquare-images">';
 
         // Only do this if the photoUrls array is not empty
-        if (photoUrls.length != 0) {
-          marker.content += '<p><strong>Location Photos</strong><br />'
+        if (photoUrls.length !== 0) {
+          marker.content += '<p><strong>Location Photos</strong><br />';
           // Only fo this if no images have been added to this marker yet
-          if ( marker.numImages  == 0 ) {
+          if ( marker.numImages  === 0 ) {
             photoUrls.forEach(function(photo) {
               marker.content += photo;
               marker.numImages++;
@@ -58,7 +59,7 @@ function  (firebaseConfig,    foursquareConfig,    Location) {
             console.log('Images already pulled. Skipping...');
           }
         } else {
-          marker.content += '<div><p>There are no Foursquare images for this location.</p></div>'
+          marker.content += '<div><p>There are no Foursquare images for this location.</p></div>';
         }
 
         // Close the Foursquare div
@@ -70,12 +71,12 @@ function  (firebaseConfig,    foursquareConfig,    Location) {
       }).fail(function(){
         // If the search fails, display an alert
         alert('Unable to pull images from Foursquare.');
-      });;
-    };
+      });
+    }
 
     function getFoursquareData(latlong, name, marker, infowindow) {
       var fsVenueId;
-      var fsService = 'venues/search/?'
+      var fsService = 'venues/search/?';
       var fsUrl = fsBaseUrl + fsService + $.param({
         'client_id': fsId,
         'client_secret': fsSecret,
@@ -89,7 +90,7 @@ function  (firebaseConfig,    foursquareConfig,    Location) {
       }).done(function(data){
         fsVenueId = data.response.venues[0].id;
         // Once I have the ID i should call the other function to get the photos
-        getFoursquareVenuePhotos(fsVenueId, marker, infowindow)
+        getFoursquareVenuePhotos(fsVenueId, marker, infowindow);
       }).fail(function(){
         // If the search fails, display an alert
         alert('Unable to pull images from Foursquare.');
@@ -108,7 +109,7 @@ function  (firebaseConfig,    foursquareConfig,    Location) {
     self.numLocations = 0;
 
     // Set up the ko array so we can add the data
-    self.initialLocationList = []
+    self.initialLocationList = [];
     self.locationList = ko.observableArray([]);
     self.filter = ko.observable();
 
@@ -129,7 +130,7 @@ function  (firebaseConfig,    foursquareConfig,    Location) {
         }
       }, error => {
         alert('Failed to load the locations from the database.');
-      })
+      });
     });
 
     function initMap() {
@@ -153,7 +154,7 @@ function  (firebaseConfig,    foursquareConfig,    Location) {
         showContent();
         drawMarkers();
       });
-    }; // END: initMap();
+    } // END: initMap();
 
     function buildMarkersList(listArray) {
       //markers = ko.observableArray([]);
@@ -168,7 +169,7 @@ function  (firebaseConfig,    foursquareConfig,    Location) {
         '<h3>' + name + '</h3>' +
         '<p><strong>Address</strong><br />' + address +'</p>' +
         '<p><strong>Why shoould you love it?</strong><br />' + whyLoveIt + '</p>' +
-        '<div>'
+        '<div>';
 
         // Create a marker per location, and put into markers array.
         var marker = new google.maps.Marker({
@@ -183,10 +184,8 @@ function  (firebaseConfig,    foursquareConfig,    Location) {
         self.markers().push(marker);
 
         // Create an onclick event to open an infowindow at each marker.
-        // console.log(marker);
         marker.addListener('click', function() {
           populateInfoWindow(this, largeInfowindow);
-          // Note: In this context this = 'clicked marker'
         });
       }
     }
@@ -198,6 +197,9 @@ function  (firebaseConfig,    foursquareConfig,    Location) {
       // Check to make sure the infowindow is not already opened on this marker.
       if (infowindow.marker != marker) {
         // Turn off the amination for the curent infowindow marker
+        // This operator MUST be != and NOT !==
+        // Otherwise the inside of the if throws:
+        // Uncaught TypeError: Cannot read property 'setAnimation' of undefined
         if (infowindow.marker != null) {
           infowindow.marker.setAnimation(null);
         }
@@ -228,8 +230,8 @@ function  (firebaseConfig,    foursquareConfig,    Location) {
           // Stop the animation when the infowindow is closed
           marker.setAnimation(null);
         });
-      };
-    };
+      }
+    }
 
     // This function will loop through the markers array and display them all.
     function drawMarkers() {
@@ -237,7 +239,7 @@ function  (firebaseConfig,    foursquareConfig,    Location) {
         // console.log(markers()[i]);
         self.markers()[i].setMap(map);
       }
-    };
+    }
 
     // This function will loop through the listings and hide/show the applicable markers
     function toggleMarkers(listArray) {
@@ -249,19 +251,19 @@ function  (firebaseConfig,    foursquareConfig,    Location) {
 
       // Go through the list of filtered results and flip the visible flag to
       // all markers that appear in the filtered list
-      for (var i = 0; i < self.markers().length; i++) {
+      for (var l = 0; l < self.markers().length; l++) {
         for (var m = 0; m < listArray.length; m++) {
-          if ( listArray[m].name === self.markers()[i].title ) {
-            self.markers()[i].setVisible(true);
+          if ( listArray[m].name === self.markers()[l].title ) {
+            self.markers()[l].setVisible(true);
           }
         }
       }
-    };
+    }
 
     // Updates the list of markers to be seen
     function updateMarkersList(listArray) {
       toggleMarkers(listArray);
-    };
+    }
 
     // ko.utils.arrayFilter - filter the locations using the location Name
     self.filteredItems = ko.computed(function() {
@@ -274,14 +276,14 @@ function  (firebaseConfig,    foursquareConfig,    Location) {
           if (startsWith.length > string.length)
               return false;
           return string.substring(0, startsWith.length) === startsWith;
-      };
+      }
 
       if (!filter) {
         // Only return the array if it has been fully built with all location points
         if (self.locationList().length === self.numLocations ) {
           // This runs only when the filter is undefined (aka: there is nothing entered in the 'Search for...' box)
           var filtered = ko.utils.arrayFilter(self.locationList(), function(location) {
-            return location.name
+            return location.name;
           });
 
           updateMarkersList(filtered);
@@ -298,7 +300,7 @@ function  (firebaseConfig,    foursquareConfig,    Location) {
 
         updateMarkersList(filtered);
         return filtered;
-      };
+      }
     }); // END: self.filteredItems
 
     // Function to show the content once all data has been loaded
@@ -307,7 +309,7 @@ function  (firebaseConfig,    foursquareConfig,    Location) {
       $('.menu').fadeIn();
       $('#menu-trigger-label').fadeIn();
       $('.overlay').fadeOut();
-    };
+    }
 
     // This runs when a new location is selected from the menu
     self.changeLocation = function(clickedLocation) {
@@ -328,7 +330,7 @@ function  (firebaseConfig,    foursquareConfig,    Location) {
     // Adds an event listener to clear the filter
     self.clearFilter = function() {
       self.filter('');
-    }
+    };
 
 
 
