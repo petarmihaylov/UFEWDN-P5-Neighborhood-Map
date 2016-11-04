@@ -2,7 +2,7 @@
 
 // Author: Petar Mihaylov petarmihaylov.me
 
-define(  ['viewmodels/neighborhoodMap'],
+define(  ['app/viewmodels/neighborhoodMap'],
 function  (NeighborhoodMapViewModel) {
   'use stricst';
 

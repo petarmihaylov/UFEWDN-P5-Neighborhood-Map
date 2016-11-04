@@ -1,8 +1,7 @@
 /*jshint esversion: 6 */
-define(  ['config/firebase', 'config/foursquare', 'models/location',
-          'https://maps.googleapis.com/maps/api/js?key=AIzaSyBWxSmaTUsN1eEsNXbNHzLm9Q6VT4bmlII',
-          'https://www.gstatic.com/firebasejs/3.4.1/firebase.js'],
-function  (firebaseConfig,    foursquareConfig,    Location) {
+define(  ['app/config/firebase', 'app/config/foursquare', 'app/models/location',
+          'app/libs/googlemaps', 'app/libs/firebase'],
+function  (firebaseConfig,        foursquareConfig,        Location) {
   'use stricst';
 
   // the viewmodels
@@ -168,7 +167,7 @@ function  (firebaseConfig,    foursquareConfig,    Location) {
         var contentString = '<div>' +
         '<h3>' + name + '</h3>' +
         '<p><strong>Address</strong><br />' + address +'</p>' +
-        '<p><strong>Why shoould you love it?</strong><br />' + whyLoveIt + '</p>' +
+        '<p><strong>Why should you love it?</strong><br />' + whyLoveIt + '</p>' +
         '<div>';
 
         // Create a marker per location, and put into markers array.
