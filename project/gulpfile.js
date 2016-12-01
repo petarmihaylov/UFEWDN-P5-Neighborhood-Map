@@ -5,6 +5,9 @@ const browserSync = require('browser-sync');
 const del = require('del');
 const wiredep = require('wiredep').stream;
 
+// Required for GH Pages deployment
+var ghPages = require('gulp-gh-pages');
+
 const $ = gulpLoadPlugins();
 const reload = browserSync.reload;
 
@@ -188,4 +191,9 @@ gulp.task('build', ['lint', 'lib-copy', 'html', 'images', 'fonts', 'extras', 'de
 
 gulp.task('default', ['clean'], () => {
   gulp.start('build');
+});
+
+gulp.task('deploy', function() {
+  return gulp.src('./dist/**/*')
+    .pipe(ghPages());
 });

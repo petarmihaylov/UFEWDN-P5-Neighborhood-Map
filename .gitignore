@@ -13,6 +13,9 @@ project/npm-debug.log
 # The dist folder needs to be included
 #project/dist/
 
+# Ignore node_modules
+node_modules
+
 
 project/.tmp
 project/bower_components
