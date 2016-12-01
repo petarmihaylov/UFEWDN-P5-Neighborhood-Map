@@ -12,6 +12,7 @@ project/npm-debug.log
 
 # The dist folder needs to be included
 #project/dist/
+project/.publish
 
 # Ignore node_modules
 node_modules
